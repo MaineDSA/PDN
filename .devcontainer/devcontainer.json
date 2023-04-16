@@ -2,5 +2,7 @@
   "name": "Python 3",
   "image": "mcr.microsoft.com/devcontainers/python",
   "features": {
-  }
+  },
+  // Use 'postCreateCommand' to run commands after the container is created.
+  "postCreateCommand": "pip install parsons"
 }
