@@ -9,6 +9,7 @@ optional arguments:
   -m, --message MESSAGE
 
 If MESSAGE is not supplied, test message will be sent to AN_TEST_PERSON.
+
 All messages will be appended with opt-out notification, for compliance.
 
 ## Environment Variables
