@@ -7,13 +7,12 @@ client = Client(os.environ['TWILIO_ACCOUNT_SID'], os.environ['TWILIO_AUTH_TOKEN'
 import argparse
 
 # Set up argument parser for command-line arguments
-parser = argparse.ArgumentParser()
-parser.add_argument("-m", "--message", type=str)
-parser.add_argument('-t', '--test')
+parser = argparse.ArgumentParser(description="Sends a community safety alert to subscribers.")
+parser.add_argument('-t', '--test', default=False, action="store_true", help="Activate test mode to message single recipient.")
+parser.add_argument("-m", "--message", type=str, help="Specify message to send.")
 
 # Parse command-line arguments to check for test mode
 testmode = parser.parse_args().test
-#testmode = 1
 
 from parsons import ActionNetwork
 
