@@ -4,5 +4,5 @@
   "features": {
   },
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "pip install parsons"
+  "postCreateCommand": "pip install parsons && pip install twilio"
 }
