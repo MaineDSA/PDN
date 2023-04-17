@@ -1,14 +1,14 @@
 # PDN
+Sends a community safety alert to subscribers.
 
 ## Usage
 usage: emergency-alert.py [-m MESAGE]
 
-Send community safety alert to subscribers.
-
 optional arguments:
+
   -m, --message MESSAGE
-  
-If message is not supplied, test message will be sent to AN_TEST_PERSON.
+
+If MESSAGE is not supplied, test message will be sent to AN_TEST_PERSON.
 All messages will be appended with opt-out notification, for compliance.
 
 ## Environment Variables
