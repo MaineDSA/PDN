@@ -2,7 +2,7 @@
 Sends a community safety alert to subscribers.
 
 ## Usage
-usage: emergency-alert.py [-m MESAGE]
+usage: emergency-alert.py [-m MESSAGE]
 
 optional arguments:
 
