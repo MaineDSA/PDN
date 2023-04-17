@@ -24,6 +24,11 @@ def create_message(person):
     given_name = person['given_name'] or ''
     messagetosend = message.replace('$NAME', given_name)
     phone = get_phone(person)
+    client.messages.create(
+            body = messagetosend,
+            from_ = str('+') + os.environ['TWILIO_FROM_PHONE'],
+            to = str('+') + phone
+        )
 
 def contact_tagged_people(tag):
     for tagging in tag['_embedded']['osdi:taggings']:
