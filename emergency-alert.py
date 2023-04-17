@@ -1,13 +1,15 @@
-message = str("Hi $NAME, this is a test of our emergency alert system.")
-
 import os
 from twilio.rest import Client
 client = Client(os.environ['TWILIO_ACCOUNT_SID'], os.environ['TWILIO_AUTH_TOKEN']) # Use API credentials via environmental variables
 
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("-m", "--message", type=str)
+defaultmessage = str("Hi $NAME, this is a test of our emergency alert system.")
+message = parser.parse_args().message or defaultmessage
+
 from parsons import ActionNetwork
 an = ActionNetwork() # Use API credentials via environmental variables
-
-tag = an.get_tag(os.environ['AN_TAG_ID'] + str('/taggings')) # Compile all records tagged in Action Network
 
 def get_person_from_tag(tagging): # Find all people linked in supplied tagging
     if tagging['item_type'] == str('osdi:person'):
@@ -35,4 +37,5 @@ def contact_tagged_people(tag):
         person = get_person_from_tag(tagging)
         create_message(person)
 
-contact_tagged_people(tag)
+an_tag = an.get_tag(os.environ['AN_TAG_ID'] + str('/taggings'))
+contact_tagged_people(an_tag)
