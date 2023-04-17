@@ -1,13 +1,14 @@
 # PDN
-Sends a community safety alert to subscribers.
-
 ## Usage
 ```
-usage: emergency-alert.py [-t] [-m MESSAGE]
+usage: emergency-alert.py [-h] [-m MESSAGE] [-t]
 
-optional arguments:
-  -m, --message MESSAGE
-  -t, --test
+Sends a community safety alert to subscribers.
+
+options:
+  -h, --help                      show this help message and exit
+  -m MESSAGE, --message MESSAGE   Specify message to send.
+  -t, --test                      Activate test mode to message single recipient.
 ```
 If MESSAGE is not supplied, user will be prompted for message entry.
 If not supplied via command line or prompt, test message will be sent to AN_TEST_PERSON.
