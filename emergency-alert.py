@@ -86,6 +86,10 @@ def get_people():
     if not tagvar:
         tagvar = input("What is the API ID of the Action Network Tag? ")
 
+    if not tagvar:
+        testmode = 1
+        return get_people()
+
     # Get the tag object from Action Network
     an_tag = an.get_tag(tagvar + str('/taggings'))
 
