@@ -6,7 +6,7 @@ usage: emergency-alert.py [-h] [-r RECIPIENT | -l LIST] [-m MESSAGE]
 Sends a community safety alert to subscribers. All messages will be appended with opt-out notification, for compliance.
 
 options:
-  -h, --help            show this help message and exit
+  -h, --help                            show this help message and exit
   -r RECIPIENT, --recipient RECIPIENT   Specify single recipient via Action Network ID.
   -l LIST, --list LIST                  Specify Action Network ID of tag to find recipients in.
   -m MESSAGE, --message MESSAGE         Specify message to send to recipient(s).
