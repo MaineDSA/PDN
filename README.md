@@ -3,7 +3,8 @@
 ```
 usage: emergency-alert.py [-h] [-r RECIPIENT | -l LIST] [-m MESSAGE]
 
-Sends a community safety alert to subscribers. All messages will be appended with opt-out notification, for compliance.
+Sends a community safety alert to subscribers.
+All messages will be appended with opt-out notification, for compliance.
 
 options:
   -h, --help                            show this help message and exit
