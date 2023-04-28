@@ -7,12 +7,11 @@ client = Client(os.environ['TWILIO_ACCOUNT_SID'], os.environ['TWILIO_AUTH_TOKEN'
 import argparse
 
 # Set up argument parser for command-line arguments
-parser = argparse.ArgumentParser(description="Sends a community safety alert to subscribers.")
-parser.add_argument('-t', '--test', default=False, action="store_true", help="Activate test mode to message single recipient.")
-parser.add_argument("-m", "--message", type=str, help="Specify message to send.")
-
-# Parse command-line arguments to check for test mode
-testmode = parser.parse_args().test
+parser = argparse.ArgumentParser(description="Sends a community safety alert to subscribers. All messages will be appended with opt-out notification, for compliance.")
+parser_recipient = parser.add_mutually_exclusive_group()
+parser_recipient.add_argument('-r', '--recipient', type=str, help="Specify single recipient via Action Network ID.")
+parser_recipient.add_argument("-l", "--list", type=str, help="Specify Action Network ID of tag to find recipients in.")
+parser.add_argument("-m", "--message", type=str, help="Specify message to send to recipient(s).")
 
 from parsons import ActionNetwork
 
@@ -58,46 +57,71 @@ def get_tagged_people(tag):
     return people
 
 def get_message():
-    # Return a test message if in test mode
-    if testmode:
-        return str("Hi $NAME, this is a test of our emergency alert system.")
+    message = None
 
-    # Get message from command-line arguments or user input
-    message = parser.parse_args().message
+    # Get the tag ID from environment variable
+    if "PDN_MESSAGE" in os.environ:
+        message = os.environ['PDN_MESSAGE']
+
+    # Get the message from command-line argument
+    if not message:
+        message = parser.parse_args().message
+
+    # Get the message from user input
     if not message:
         message = input("Write a message. $NAME will be replaced with the person's first name. "
                 + "Be sure to identify the source of the message. Opt out text will be added automatically to the end. "
-                + "To send a test message, don't enter anything. Ctrl+C to cancel. "
+                + "Press enter without typing anything to use a test message. Press Ctrl+C to cancel. "
             )
+
+    # Use a test message
+    if not message:
+        message = str("Hi $NAME, this is a test of our emergency alert system.")
 
     return message
 
 def get_people():
-    # Get test person if in test mode
-    if testmode:
-        testperson_id = os.environ['AN_TEST_PERSON']
-        if not testperson_id:
-            testperson_id = input("What is the API ID of the Action Network Person to be sent the test message? ")
+    tag = None
 
-        return [an.get_person(testperson_id)]
+    # Get the tag ID from environment variable
+    if "AN_TAG_ID" in os.environ:
+        tag = os.environ['AN_TAG_ID']
 
-    # Get the tag ID from environment variables or user input
-    tagvar = os.environ['AN_TAG_ID']
-    if not tagvar:
-        tagvar = input("What is the API ID of the Action Network Tag? ")
+    # Get the tag ID from command line argument
+    if not tag:
+        tag = parser.parse_args().list
 
-    if not tagvar:
-        testmode = 1
-        return get_people()
+    # Get the tag ID from user input
+    if not tag:
+        tag = input("What is the API ID of the Action Network tag to receive the message? ")
 
     # Get the tag object from Action Network
-    an_tag = an.get_tag(tagvar + str('/taggings'))
+    an_tag = an.get_tag(tag + str('/taggings'))
 
     # Return people with the specified tag
     return get_tagged_people(an_tag)
 
+def get_person():
+    recipient = None
+
+    # Get the tag ID from environment variable
+    if "AN_RECIPIENT_ID" in os.environ:
+        recipient = os.environ['AN_RECIPIENT_ID']
+
+    # Get the tag ID from command line argument
+    if not recipient:
+        recipient = parser.parse_args().recipient
+
+    # Get the tag ID from user input
+    if not recipient and not parser.parse_args().list:
+        recipient = input("What is the API ID of the Action Network person to receive the message? Press enter without typing anything to use an Action Network tag ID instead of a person. ")
+
+    # Return the person object from Action Network, if found
+    if recipient:
+        return [an.get_person(recipient)]
+
 # Get the message and send it to each person
+people = get_person() or get_people()
 message = get_message()
-people = get_people()
 for person in people:
     send_message(person, message)
