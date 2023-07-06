@@ -12,6 +12,13 @@ options:
   -l LIST, --list LIST                  Specify Action Network ID of tag to find recipients in.
   -m MESSAGE, --message MESSAGE         Specify message to send to recipient(s).
 ```
+## Dependencies
+### Parsons
+To use this script, you must have installed [parsons](https://www.parsonsproject.org/) and [twilio](https://pypi.org/project/twilio/) packages.
+
+You can do this from the command line via:
+
+```pip install parsons && pip install twilio```
 
 ## Environment Variables
 ### Authentication
